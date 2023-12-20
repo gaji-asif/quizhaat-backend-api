@@ -40,29 +40,23 @@ class UserController extends Controller
     public function register(RegisterValidationRequest $request) 
     { 
         $data = [
-            'name'=>$request['name'],
+            'full_name'=>$request['full_name'],
+            'username'=>$request['username'],
             'email'=>$request['email'],
             'phone'=>$request['phone'],
-            'password'=> Hash::make($request['password'])
+            'password'=> Hash::make($request['password']),
+            'usertype'=>1
         ];
         $user = User::create($data); 
         $success['token'] =  $user->createToken('MyApp')-> accessToken; 
-        $success['name'] =  $user->name;
+        $success['full_name'] =  $user->full_name;
         
         return response()->json(['success'=>$success], $this-> successStatus); 
-    }
-    /** 
-     * details api 
-     * 
-     * @return \Illuminate\Http\Response 
-     */ 
-    public function details() 
-    { 
-        $user = Auth::user(); 
-
-        return response()->json(['success' => $user], $this-> successStatus); 
     } 
-
+    /** 
+     * logout api 
+     * 
+     */ 
     public function logout(Request $request)
     {
         $token = $request->user()->token();
@@ -75,5 +69,65 @@ class UserController extends Controller
         }
 
         return response($response, 200);
+    }
+    /** 
+     * User Details 
+     * 
+     */ 
+    public function userDetails()
+    {
+        if(Auth::user()){
+            $id = Auth::user()->id;
+            $userData = User::find($id);
+            
+            return response()->json(
+                [
+                    'success'=>true,
+                    'data'=>$userData
+                ],
+                 $this-> successStatus
+            ); 
+        }else{
+            $response = ["message" => 'User does not exist'];
+            return response($response, 422);
+        }
+
+    }
+
+    public function updateProfile(Request $request)
+    {
+        if(Auth::user()){
+            $id = Auth::user()->id;
+            $userData = User::find($id);
+            $data = [
+                'full_name'=>$request['full_name'],
+                'username'=>$request['username'],
+                'email'=>$request['email'],
+                'phone'=>$request['phone'],
+                'usertype'=>1,
+                 
+            ];
+            if($request->file('image')){
+                $image = $request->file('image');
+                $path = public_path('user_image/');
+            
+                $imageName = $request['username'].time() . '.' . $image->extension();
+                $image->move($path, $imageName);
+               $data['image'] = $imageName;
+            }
+            $result = $userData->update($data);
+            if($result){
+                return response()->json(
+                    [
+                        'success'=>true,
+                        'message'=>"Profile Updated Successfully"
+                    ],
+                     $this-> successStatus
+                ); 
+            }
+        }else{
+            $response = ["message" => 'User does not exist'];
+            return response($response, 422);
+        }
     }
 }

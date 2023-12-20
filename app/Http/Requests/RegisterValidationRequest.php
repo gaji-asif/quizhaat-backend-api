@@ -24,7 +24,7 @@ class RegisterValidationRequest extends FormRequest
     public function rules()
     {
         return [
-            'name' => 'required',
+            'full_name' => 'required',
             'phone' => 'required',
             'email' => 'required|email|unique:users',
             'password' => 'required',
@@ -35,7 +35,7 @@ class RegisterValidationRequest extends FormRequest
     public function messages()
     {
         return [
-            'name.required' => 'Please provide your name.',
+            'full_name.required' => 'Please provide your name.',
             'phone.required' => 'Please provide your phone number.',
             'email.required' => 'Please provide your email address.',
             'email.email' => 'Please provide a valid email address.',
