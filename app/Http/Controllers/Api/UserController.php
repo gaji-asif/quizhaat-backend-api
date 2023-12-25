@@ -22,7 +22,7 @@ class UserController extends Controller
             if (Hash::check($request->password, $user->password)) {
                 $token =  $user->createToken('MyApp')-> accessToken;
                 $response = ['token' => $token];
-                return response($response, 200);
+                return response($response, $this-> successStatus);
             } else {
                 $response = ["message" => "Password mismatch"];
                 return response($response, 422);

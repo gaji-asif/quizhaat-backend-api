@@ -3,6 +3,7 @@
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\Api\UserController;
+use App\Http\Controllers\Api\DailyQuizeController;
 
 /*
 |--------------------------------------------------------------------------
@@ -26,3 +27,4 @@ Route::group(['middleware' => 'auth:api','controller'=>UserController::class], f
     Route::get('/user_profile', 'userDetails');
     Route::post('/update_user_profile', 'updateProfile');
 });
+Route::get('/daily-quize',[DailyQuizeController::class,'dailyQuize']);
