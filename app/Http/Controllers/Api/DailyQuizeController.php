@@ -9,6 +9,7 @@ use App\Models\QuestionBank;
 use App\Models\QuestionOptions;
 use App\Models\Subjects;
 use Carbon\Carbon;
+use Illuminate\Support\Facades\Auth; 
 
 class DailyQuizeController extends Controller
 {
@@ -46,5 +47,15 @@ class DailyQuizeController extends Controller
         }else{
             return response()->json(['message'=>'no quize for today'], $this-> successStatus); 
         }
+    }
+
+    public function dailyQuizeAnswerSubmit(Request $request)
+    {
+        if(Auth::user()){
+          dd($request);
+        }else{
+            dd('please make sure you loged in first');
+        }
+       
     }
 }

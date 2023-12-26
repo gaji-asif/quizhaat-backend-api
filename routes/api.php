@@ -4,6 +4,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\Api\UserController;
 use App\Http\Controllers\Api\DailyQuizeController;
+use App\Http\Controllers\Api\BlogController;
 
 /*
 |--------------------------------------------------------------------------
@@ -27,4 +28,13 @@ Route::group(['middleware' => 'auth:api','controller'=>UserController::class], f
     Route::get('/user_profile', 'userDetails');
     Route::post('/update_user_profile', 'updateProfile');
 });
+Route::controller(BlogController::class)->group(function() {
+
+    Route::get('/blog-short', 'blogShort');
+    Route::get('/blog-details/{id}', 'blogDetails');
+});
 Route::get('/daily-quize',[DailyQuizeController::class,'dailyQuize']);
+Route::group(['middleware' => 'auth:api','controller'=>DailyQuizeController::class], function(){
+
+    Route::post('/submit-quize-answer', 'dailyQuizeAnswerSubmit');
+});
