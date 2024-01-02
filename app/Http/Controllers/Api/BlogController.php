@@ -24,7 +24,7 @@ class BlogController extends Controller
                 'thumbnail'=>$blog->thumbnail,
             ];
         }
-    
+
         if(!empty($data)){
             return response()->json(['blogs'=>$data], $this-> successStatus); 
         }else{
