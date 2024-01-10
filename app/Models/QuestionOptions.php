@@ -19,4 +19,7 @@ class QuestionOptions extends Model
     function questions(){
         return $this->belongsTo(QuestionBank::class,'question_bank_id','id');
     }
+    function usersAnswer(){
+        return $this->hasMany(UsersAnswer::class,'id','users_answer_id');
+    }
 }

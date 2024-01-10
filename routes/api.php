@@ -34,6 +34,7 @@ Route::controller(BlogController::class)->group(function() {
     Route::get('/blog-details/{id}', 'blogDetails');
 });
 Route::get('/daily-quize',[DailyQuizeController::class,'dailyQuize']);
+Route::get('/all-quiz-answer-list',[DailyQuizeController::class,'allQuizAnswerList']);
 Route::group(['middleware' => 'auth:api','controller'=>DailyQuizeController::class], function(){
 
     Route::post('/submit-quize-answer', 'dailyQuizeAnswerSubmit');

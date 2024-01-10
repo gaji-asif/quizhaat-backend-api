@@ -32,4 +32,7 @@ class QuestionBank extends Model
     function subject(){
         return $this->belongsTo(Subjects::class, 'subject_id', 'id');
     }
+    function questionAnswer(){
+        return $this->hasMany(UserAnswer::class, 'id', 'question_id');
+    }
 }
