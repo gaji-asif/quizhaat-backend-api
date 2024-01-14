@@ -35,6 +35,10 @@ class User extends Authenticatable
         'updated_by',
     ];
 
+    function userAnswer(){
+        return $this->hasMany(UsersAnswer::class,'id','user_id');
+    }
+
     /**
      * The attributes that should be hidden for serialization.
      *

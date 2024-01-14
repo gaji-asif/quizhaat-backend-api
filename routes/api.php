@@ -16,10 +16,6 @@ use App\Http\Controllers\Api\BlogController;
 | be assigned to the "api" middleware group. Make something great!
 |
 */
-
-// Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
-//     return $request->user();
-// });
 Route::post('/login', [UserController::class,'login']);
 Route::post('/register', [UserController::class,'register']);
 Route::group(['middleware' => 'auth:api','controller'=>UserController::class], function(){
@@ -35,6 +31,7 @@ Route::controller(BlogController::class)->group(function() {
 });
 Route::get('/daily-quize',[DailyQuizeController::class,'dailyQuize']);
 Route::get('/all-quiz-answer-list',[DailyQuizeController::class,'allQuizAnswerList']);
+Route::get('/quiz-answer-giver-list/{id}',[DailyQuizeController::class,'QuizAnswerGiverList']);
 Route::group(['middleware' => 'auth:api','controller'=>DailyQuizeController::class], function(){
 
     Route::post('/submit-quize-answer', 'dailyQuizeAnswerSubmit');

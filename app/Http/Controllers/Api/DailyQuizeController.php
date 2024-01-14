@@ -119,10 +119,9 @@ class DailyQuizeController extends Controller
 
     public function allQuizAnswerList()
     {
-        // Get all quizzes
+     
         $quizzes = AllQuizes::with('questionBnk')->get();
     
-        // Group the answers by quiz ID and count the correct answers for each quiz
         $correctAnswersByQuiz = $quizzes->mapWithKeys(function ($quiz) {
             $correctAnswersCount = UsersAnswer::where('question_id', $quiz->question_id)
                 ->where('is_right', 1)
@@ -130,12 +129,33 @@ class DailyQuizeController extends Controller
     
             return [
                 $quiz->id => [
-                    'quiz_number' => $quiz->id, // Assuming 'id' is the quiz number field
+                    'quiz_number' => $quiz->id,
                     'total_correct_answers' => $correctAnswersCount,
                 ]
             ];
         });
     
         return $correctAnswersByQuiz;
-    }      
+    }   
+    public function QuizAnswerGiverList($id)
+    {
+        $quiz = AllQuizes::with('questionBnk')->find($id);
+
+        if (!$quiz) {
+            return response()->json(['message' => 'Quiz not found'], $this->successStatus);
+        }
+
+        $correctAnswerUsers = UsersAnswer::where('question_id', $quiz->question_id)
+            ->where('is_right', 1)
+            ->with('user') 
+            ->get();
+        $correctAnswerUsersData = $correctAnswerUsers->map(function ($answer) {
+            return [
+                'user_id' => $answer->user->id,
+                'full_name' => $answer->user->full_name,
+            ];
+        });
+
+        return response()->json(['data' => $correctAnswerUsersData], $this->successStatus);
+    }   
 }
