@@ -32,7 +32,7 @@ class DailyQuizeController extends Controller
         foreach ($optios as $option){
             $optionData[] = [
               'option_id'=> $option->id,
-              'options'=> $option->title,
+              'option'=> $option->title,
             ];
         }
         if($dateOnly == $today){
