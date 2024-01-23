@@ -21,7 +21,7 @@ class UserController extends Controller
         if ($user) {
             if (Hash::check($request->password, $user->password)) {
                 $token =  $user->createToken('MyApp')-> accessToken;
-                $response = ['token' => $token];
+                $response = ['token' => $token, 'username'=>$user->username];
                 return response($response, $this-> successStatus);
             } else {
                 $response = ["message" => "Password mismatch"];
@@ -49,7 +49,7 @@ class UserController extends Controller
         ];
         $user = User::create($data); 
         $success['token'] =  $user->createToken('MyApp')-> accessToken; 
-        $success['full_name'] =  $user->full_name;
+        $success['username'] = $request['username'];
         
         return response()->json(['success'=>$success], $this-> successStatus); 
     } 
