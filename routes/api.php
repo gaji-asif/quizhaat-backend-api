@@ -22,7 +22,7 @@ Route::group(['middleware' => 'auth:api','controller'=>UserController::class], f
 
     Route::post('/logout', 'logout');
     Route::get('/user_profile', 'userDetails');
-    Route::post('/update_user_profile', 'updateProfile');
+    Route::PUT('/update_user_profile', 'updateProfile');
 });
 Route::controller(BlogController::class)->group(function() {
 
@@ -32,7 +32,7 @@ Route::controller(BlogController::class)->group(function() {
 Route::get('/daily-quize',[DailyQuizeController::class,'dailyQuize']);
 Route::get('/all-quiz-answer-list',[DailyQuizeController::class,'allQuizAnswerList']);
 Route::get('/quiz-answer-giver-list/{id}',[DailyQuizeController::class,'QuizAnswerGiverList']);
-Route::group(['middleware' => 'auth:api','controller'=>DailyQuizeController::class], function(){
+Route::group(['middleware' => 'auth:api', 'cors','controller'=>DailyQuizeController::class], function(){
 
     Route::post('/submit-quize-answer', 'dailyQuizeAnswerSubmit');
 });

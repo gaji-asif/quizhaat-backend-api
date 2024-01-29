@@ -53,12 +53,14 @@ class DailyQuizeController extends Controller
 
     public function dailyQuizeAnswerSubmit(Request $request)
     {
-        if(Auth::user()){
-          dd($request);
-        }else{
-            dd('please make sure you loged in first');
-        }
-       
+        dd($request);
+            $setUserAnswerId = $request->input('set_user_answer_id');
+            $quistionId = $request->input('quistion_id');
+            $userID = $request->input('userID');
+    
+            // Now you have the values, do whatever you want with them
+            dd($setUserAnswerId, $quistionId, $userID);
+      
     }
 
     // public function allQuizAnswerList()
