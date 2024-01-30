@@ -21,7 +21,16 @@ class UserController extends Controller
         if ($user) {
             if (Hash::check($request->password, $user->password)) {
                 $token =  $user->createToken('MyApp')-> accessToken;
-                $response = ['token' => $token, 'username'=>$user->username, 'userid'=>$user->id];
+                $data = [
+                    'token' => $token,
+                    'username'=>$user->username, 
+                    'userid'=>$user->id
+                ];
+                $response = [
+                    'success' =>true,
+                    'message' =>"User logged in successfully",
+                    'data' =>$data
+                    ];
                 return response($response, $this-> successStatus);
             } else {
                 $response = ["message" => "Password mismatch"];
@@ -48,11 +57,19 @@ class UserController extends Controller
             'usertype'=>1
         ];
         $user = User::create($data); 
-        $success['token'] =  $user->createToken('MyApp')-> accessToken; 
-        $success['username'] = $request['username'];
-        $success['userid'] = $user->id;
+        $token =  $user->createToken('MyApp')-> accessToken;
+        $responseData = [
+            'token' => $token,
+            'username'=>$user->username, 
+            'userid'=>$user->id
+        ];
+        $response = [
+            'success' =>true,
+            'message' =>"registration successfull",
+            'data' =>$responseData
+            ];
         
-        return response()->json(['success'=>$success], $this-> successStatus); 
+        return response()->json($response, $this-> successStatus); 
     } 
     /** 
      * logout api 
@@ -131,4 +148,9 @@ class UserController extends Controller
             return response($response, 422);
         }
     }
+
+    // function dailyQuizeAnswerSubmit(Request $request)
+    // {
+    //     dd($request);
+    // }
 }
