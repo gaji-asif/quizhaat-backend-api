@@ -26,12 +26,14 @@ class UserController extends Controller
                     'username'=>$user->username, 
                     'userid'=>$user->id
                 ];
-                $response = [
-                    'success' =>true,
-                    'message' =>"User logged in successfully",
-                    'data' =>$data
-                    ];
-                return response($response, $this-> successStatus);
+                $responseArray = [
+                    'status_code' => 200,
+                    'status_message' => 'OK',
+                    'message' => 'login successful',
+                    'is_data' => true,
+                    'data' => $data
+                ];
+                return response($responseArray);
             } else {
                 $response = ["message" => "Password mismatch"];
                 return response($response, 422);
@@ -63,13 +65,15 @@ class UserController extends Controller
             'username'=>$user->username, 
             'userid'=>$user->id
         ];
-        $response = [
-            'success' =>true,
-            'message' =>"registration successfull",
-            'data' =>$responseData
-            ];
+        $responseArray = [
+            'status_code' => 200,
+            'status_message' => 'OK',
+            'message' => 'registration successful',
+            'is_data' => true,
+            'data' => $responseData
+        ];
         
-        return response()->json($response, $this-> successStatus); 
+        return response()->json($responseArray); 
     } 
     /** 
      * logout api 
