@@ -6,16 +6,18 @@ use App\Models\User;
 use Illuminate\Support\Facades\Auth; 
 use App\Http\Requests\RegisterValidationRequest;
 use Illuminate\Support\Facades\Hash;
-use Exception;
 
 class UserController extends Controller 
 {
-    public $successStatus = 200;
-    /** 
-     * login api 
-     * @param reqiest body from user
-     * @return \Illuminate\Http\Response 
-     */ 
+        /**
+     * Login API.
+     *
+     * Authenticates a user based on provided credentials.
+     *
+     * @param  \Illuminate\Http\Request  $request  The request body containing user credentials.
+     * @return \Illuminate\Http\Response
+     */
+
     public function login(Request $request)
     { 
         try {
@@ -56,16 +58,25 @@ class UserController extends Controller
                 ];
                 return response($responseArray);
              }
-        } catch (\Throwable $th) {
-            throw $th;
+        } catch (\Exception $th) {
+           return response([
+            'status_code' => 500,
+            'status_message' => 'error',
+            'message' => $th->getMessage(),
+            'is_data' => false,
+            'data' => []
+         ]);
         }       
        
     }
-    /** 
-     * Register api 
-     * @param $request
-     * @return \Illuminate\Http\Response 
-     */ 
+    /**
+     * Register API.
+     *
+     * Creates a new user account based on the provided registration data.
+     *
+     * @param  \App\Http\Requests\RegisterValidationRequest  $request  The validated request containing user registration data.
+     * @return \Illuminate\Http\JsonResponse
+     */
     public function register(RegisterValidationRequest $request) 
     { 
         try {
@@ -93,14 +104,24 @@ class UserController extends Controller
             ];
             
             return response()->json($responseArray); 
-        } catch (\Throwable $th) {
-            throw $th;
-        }
+        } catch (\Exception $th) {
+            return response([
+             'status_code' => 500,
+             'status_message' => 'error',
+             'message' => $th->getMessage(),
+             'is_data' => false,
+             'data' => []
+          ]);
+         } 
     } 
-    /** 
-     * logout api 
-     * 
-     */ 
+    /**
+     * Logout API.
+     *
+     * Revokes the access token for the authenticated user, effectively logging them out.
+     *
+     * @param  \Illuminate\Http\Request  $request  The authenticated user's request.
+     * @return \Illuminate\Http\Response
+     */
     public function logout(Request $request)
     {
         $token = $request->user()->token();
@@ -138,11 +159,24 @@ class UserController extends Controller
     
                 return response($response, 422);
             }
-        } catch (\Throwable $th) {
-            throw $th;
-        }
+        } catch (\Exception $th) {
+            return response([
+             'status_code' => 500,
+             'status_message' => 'error',
+             'message' => $th->getMessage(),
+             'is_data' => false,
+             'data' => []
+          ]);
+         } 
     }
-
+    /**
+     * Update Profile API.
+     *
+     * Updates the profile information of the authenticated user.
+     *
+     * @param  \Illuminate\Http\Request  $request  The request containing updated user profile data.
+     * @return \Illuminate\Http\JsonResponse
+     */
     public function updateProfile(Request $request)
     {
         try {
@@ -167,20 +201,31 @@ class UserController extends Controller
                 }
                 $result = $userData->update($data);
                 if($result){
-                    return response()->json(
-                        [
-                            'success'=>true,
-                            'message'=>"Profile Updated Successfully"
-                        ],
-                         $this-> successStatus
-                    ); 
+                    $responseArray = [
+                        'status_code' => 200,
+                        'status_message' => 'OK',
+                        'message' => 'Profile Updated Successfully',
+                        'is_data' => true,
+                    ];
+                    return response()->json($responseArray);
                 }
             }else{
-                $response = ["message" => 'User does not exist'];
-                return response($response, 422);
+                $responseArray = [
+                    'status_code' => 422,
+                    'status_message' => 'OK',
+                    'message' => 'User does not exist',
+                    'is_data' => false,
+                ];
+                return response()->json($responseArray);
             }
-        } catch (\Throwable $th) {
-            throw $th;
-        }
+        } catch (\Exception $th) {
+            return response([
+             'status_code' => 500,
+             'status_message' => 'error',
+             'message' => $th->getMessage(),
+             'is_data' => false,
+             'data' => []
+          ]);
+         } 
     }
 }
