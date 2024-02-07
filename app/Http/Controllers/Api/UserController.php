@@ -17,6 +17,7 @@ class UserController extends Controller
      */ 
     public function login(Request $request)
     { 
+        //echo "test"; exit;
         $user = User::where('email', $request->email)->first();
         if ($user) {
             if (Hash::check($request->password, $user->password)) {
@@ -48,7 +49,8 @@ class UserController extends Controller
             'usertype'=>1
         ];
         $user = User::create($data); 
-        $success['token'] =  $user->createToken('MyApp')-> accessToken; 
+        //dd($user);
+        //$success['token'] =  $user->createToken('MyApp')-> accessToken; 
         $success['username'] = $request['username'];
         $success['userid'] = $user->id;
         

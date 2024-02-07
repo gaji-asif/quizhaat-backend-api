@@ -10,7 +10,9 @@
         "laravel/framework": "^10.10",
         "laravel/passport": "^11.10",
         "laravel/sanctum": "^3.3",
-        "laravel/tinker": "^2.8"
+        "laravel/tinker": "^2.8",
+        "sebastian/environment": "^6.0",
+        "sebastian/version": "^4.0"
     },
     "require-dev": {
         "fakerphp/faker": "^1.9.1",
