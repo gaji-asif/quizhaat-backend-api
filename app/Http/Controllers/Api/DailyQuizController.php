@@ -196,9 +196,9 @@ class DailyQuizController extends Controller
     public function QuizAnswerGiverList($id)
     {
         try {
+            
             $quiz = AllQuizes::with('questionBnk')->find($id);
-
-            if (!$quiz) {
+            if (empty($quiz->question_id)) {
                 $responseArray = [
                     'status_code' => 422,
                     'status_message' => 'OK',
@@ -215,6 +215,7 @@ class DailyQuizController extends Controller
                 ->get();
             $correctAnswerUsersData = $correctAnswerUsers->map(function ($answer) {
                 return [
+                    'question_title' => $answer->question->question,
                     'user_id' => $answer->user->id,
                     'full_name' => $answer->user->full_name,
                 ];
