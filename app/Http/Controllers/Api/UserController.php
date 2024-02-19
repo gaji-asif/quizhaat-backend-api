@@ -21,20 +21,20 @@ class UserController extends Controller
     public function login(Request $request)
     { 
         //echo "test"; exit;
-        $user = User::where('email', $request->email)->first();
-        if ($user) {
-            if (Hash::check($request->password, $user->password)) {
-                $token =  $user->createToken('MyApp')-> accessToken;
-                $response = ['token' => $token, 'username'=>$user->username, 'userid'=>$user->id];
-                return response($response, $this-> successStatus);
-            } else {
-                $response = ["message" => "Password mismatch"];
-                return response($response, 422);
-            }
-        } else {
-            $response = ["message" => 'User does not exist'];
-            return response($response, 422);
-        }
+        // $user = User::where('email', $request->email)->first();
+        // if ($user) {
+        //     if (Hash::check($request->password, $user->password)) {
+        //         $token =  $user->createToken('MyApp')-> accessToken;
+        //         $response = ['token' => $token, 'username'=>$user->username, 'userid'=>$user->id];
+        //         return response($response, 200);
+        //     } else {
+        //         $response = ["message" => "Password mismatch"];
+        //         return response($response, 422);
+        //     }
+        // } else {
+        //     $response = ["message" => 'User does not exist'];
+        //     return response($response, 422);
+        // }
 
         try {
             $user = User::where('email', $request->email)->first();
@@ -111,7 +111,7 @@ class UserController extends Controller
         $success['username'] = $request['username'];
         $success['userid'] = $user->id;
         
-        return response()->json(['success'=>$success], $this-> successStatus); 
+        return response()->json(['success'=>$success], 200); 
 
         try {
             $data = [

@@ -78,13 +78,19 @@ class DailyQuizController extends Controller
 
     public function dailyQuizeAnswerSubmit(Request $request)
     {
-        dd($request);
-            $setUserAnswerId = $request->input('set_user_answer_id');
-            $quistionId = $request->input('quistion_id');
-            $userID = $request->input('userID');
+        try {
+            // Your existing logic to handle quiz submission
     
-            // Now you have the values, do whatever you want with them
-            dd($setUserAnswerId, $quistionId, $userID);
+            // For debugging purposes, you can dd($request) or log it
+            dd("here",$request->all());
+    
+            return response()->json(['message' => 'Quiz answer submitted successfully'], 200);
+        } catch (\Exception $e) {
+            // Log the exception for debugging
+            \Log::error("Error submitting quiz answer: " . $e->getMessage());
+    
+            return response()->json(['error' => 'Internal Server Error'], 500);
+        }
       
     }
 
