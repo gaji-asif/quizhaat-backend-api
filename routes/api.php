@@ -32,8 +32,6 @@ Route::controller(BlogController::class)->group(function() {
 Route::get('/daily-quiz',[DailyQuizController::class,'dailyQuize']);
 Route::get('/all-quiz-answer-list',[DailyQuizController::class,'allQuizAnswerList']);
 Route::get('/quiz-answer-giver-list/{id}',[DailyQuizController::class,'QuizAnswerGiverList']);
-// Route::group(['middleware' => 'auth:api', 'cors','controller'=>DailyQuizController::class], function(){
-
-//     Route::post('/submit-quiz-answer', 'dailyQuizeAnswerSubmit');
-// });
-Route::post('/submit-quiz-answer', [DailyQuizController::class,'dailyQuizeAnswerSubmit'])->middleware('cors');
+Route::group(['middleware' => 'cors'], function () {
+    Route::post('/submit-quiz-answer', [DailyQuizController::class,'dailyQuizeAnswerSubmit']);
+});

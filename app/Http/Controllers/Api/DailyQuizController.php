@@ -65,31 +65,50 @@ class DailyQuizController extends Controller
                 ];
                 return response()->json($responseArray);
             }
-        } catch (\Exception $th) {
-            return response([
-             'status_code' => 500,
-             'status_message' => 'error',
-             'message' => $th->getMessage(),
-             'is_data' => false,
-             'data' => []
-          ]);
-         } 
+        } catch (\Exception $e) {
+            \Log::error('Error on daily quiz: ' . $e->getMessage());
+    
+            return response()->json(['success' => false, 'message' => 'An error occurred while fetching the daily quiz'], 500);
+        }
     }
 
     public function dailyQuizeAnswerSubmit(Request $request)
     {
         try {
-            // Your existing logic to handle quiz submission
-    
-            // For debugging purposes, you can dd($request) or log it
-            dd("here",$request->all());
-    
-            return response()->json(['message' => 'Quiz answer submitted successfully'], 200);
+            $jsonData = $request->json()->all();
+            $setUserAnswerId = $jsonData['set_user_answer_id'];
+            $questionId = $jsonData['quistion_id'];
+            $userId = $jsonData['userID'];
+
+            $isDublicate = UsersAnswer::where('user_id',$userId )->where('question_id',$questionId)->first();
+            if(empty($isDublicate)){
+                $data = [
+                    'user_id'=>$userId,
+                    'users_answer_id'=>$setUserAnswerId,
+                    'question_id'=>$questionId,
+                ];
+                $questionOptions = QuestionOptions::select('status')->where('id', $setUserAnswerId)->first();
+                if( isset($questionOptions) && $questionOptions->status == 1){
+                    $data['is_right'] = 1;
+                }else{
+                    $data['is_right'] = 0;
+                }
+            
+                $submitAnswer = UsersAnswer::create($data); 
+                if($submitAnswer){  
+                     return response()->json(['status' => 'true', 'message'=>'submitted successfully']);
+                }else{
+                    return response()->json(['status' => 'false', 'message'=>'something went wrong, please try again']);
+                }
+            }else{
+                return response()->json(['status' => 'false', 'message'=>'already given']);
+            }
+            
+        
         } catch (\Exception $e) {
-            // Log the exception for debugging
-            \Log::error("Error submitting quiz answer: " . $e->getMessage());
+            \Log::error('Error submitting quiz answer: ' . $e->getMessage());
     
-            return response()->json(['error' => 'Internal Server Error'], 500);
+            return response()->json(['success' => false, 'message' => 'An error occurred while submitting the quiz answer'], 500);
         }
       
     }
@@ -181,14 +200,10 @@ class DailyQuizController extends Controller
             ];
         
             return $responseArray;
-        } catch (\Exception $th) {
-            return response([
-             'status_code' => 500,
-             'status_message' => 'error',
-             'message' => $th->getMessage(),
-             'is_data' => false,
-             'data' => []
-          ]);
+        } catch (\Exception $e) {
+            \Log::error('Error on all quiz answer list: ' . $e->getMessage());
+    
+            return response()->json(['success' => false, 'message' => 'An error occurred while all quiz answer list'], 500);
          } 
     }  
     /**
@@ -235,15 +250,11 @@ class DailyQuizController extends Controller
             ];
 
             return response()->json($responseArray);
-        } catch (\Exception $th) {
-            return response([
-            'status_code' => 500,
-            'status_message' => 'error',
-            'message' => $th->getMessage(),
-            'is_data' => false,
-            'data' => []
-        ]);
-        } 
+        } catch (\Exception $e) {
+            \Log::error('Error on quiz answer giver list: ' . $e->getMessage());
+    
+            return response()->json(['success' => false, 'message' => 'An error occurred while fetching the answer giver list data'], 500);
+         } 
         
     }   
 }
